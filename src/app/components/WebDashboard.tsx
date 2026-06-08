@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   LayoutDashboard, Package, Tag, Boxes, ShoppingCart, FileText,
   Users, Truck, BarChart3, TrendingUp, UserCog, Crown, Settings,
@@ -9,15 +9,15 @@ import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip,
   ResponsiveContainer, PieChart, Pie, Cell,
 } from "recharts";
-import { MONTHLY_REVENUE, DAILY_SALES, PRODUCTS, CUSTOMERS, INVOICES, CATEGORIES, type Lang, type Screen } from "../data/store";
+import { MONTHLY_REVENUE, DAILY_SALES, PRODUCTS, CUSTOMERS, INVOICES, CATEGORIES, type Lang, type Screen, type Theme } from "../data/store";
 
 const P = "#0F766E"; const AM = "#F59E0B"; const GR = "#22C55E"; const PU = "#8B5CF6"; const RE = "#EF4444";
 
-interface Props { lang: Lang; onNavigate: (s: Screen) => void; onSetLang: (l: Lang) => void; }
+interface Props { lang: Lang; theme: Theme; onNavigate: (s: Screen) => void; onSetLang: (l: Lang) => void; }
 
 type WebTab = 'dashboard' | 'products' | 'categories' | 'inventory' | 'sales' | 'invoices' | 'customers' | 'suppliers' | 'reports' | 'analytics' | 'users' | 'subscription' | 'settings';
 
-const NAV_ITEMS: { key: WebTab; icon: React.ReactNode; label: string; labelEn: string }[] = [
+const NAV_ITEMS: { key: WebTab; icon: ReactNode; label: string; labelEn: string }[] = [
   { key: 'dashboard', icon: <LayoutDashboard size={20} />, label: 'الرئيسية', labelEn: 'Dashboard' },
   { key: 'products', icon: <Package size={20} />, label: 'المنتجات', labelEn: 'Products' },
   { key: 'categories', icon: <Tag size={20} />, label: 'الفئات', labelEn: 'Categories' },
@@ -453,8 +453,9 @@ function ComingSoon({ ar, tab }: { ar: boolean; tab: WebTab }) {
 }
 
 /* ── Main Web Dashboard ── */
-export function WebDashboard({ lang, onNavigate, onSetLang }: Props) {
+export function WebDashboard({ lang, theme, onNavigate, onSetLang }: Props) {
   const ar = lang === 'ar';
+  const isDark = theme === 'dark';
   const [tab, setTab] = useState<WebTab>('dashboard');
   const [collapsed, setCollapsed] = useState(false);
 
@@ -469,9 +470,9 @@ export function WebDashboard({ lang, onNavigate, onSetLang }: Props) {
   };
 
   return (
-    <div className="h-screen flex overflow-hidden" style={{ fontFamily: 'Cairo, sans-serif', direction: ar ? 'rtl' : 'ltr', background: '#F8FAFC' }}>
+    <div className="h-screen flex overflow-hidden" style={{ fontFamily: 'Cairo, sans-serif', direction: ar ? 'rtl' : 'ltr', background: isDark ? '#020617' : '#F8FAFC' }}>
       <Sidebar ar={ar} active={tab} setActive={setTab} collapsed={collapsed} setCollapsed={setCollapsed} onNavigate={onNavigate} />
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+      <div className="flex-1 flex flex-col overflow-hidden min-w-0" style={{ background: isDark ? '#071727' : undefined }}>
         <Topbar ar={ar} tab={tab} onSetLang={onSetLang} lang={lang} />
         <main className="flex-1 overflow-y-auto p-5">{renderContent()}</main>
       </div>

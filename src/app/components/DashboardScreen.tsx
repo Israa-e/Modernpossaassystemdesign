@@ -26,126 +26,130 @@ export function DashboardScreen({ lang, onNavigate }: Props) {
   ];
 
   return (
-    <div className="pb-24" style={{ background: '#F8FAFC', fontFamily: 'Cairo, sans-serif', direction: ar ? 'rtl' : 'ltr' }}>
-      {/* Header */}
-      <div className="px-5 pt-6 pb-5 rounded-b-[2.5rem] shadow-lg" style={{ background: `linear-gradient(135deg, #0B5E57 0%, #14B8A6 100%)` }}>
-        <div className="flex justify-between items-start mb-4">
+    <div className="pb-24" style={{ background: '#E7EDF2', fontFamily: 'Cairo, sans-serif', direction: ar ? 'rtl' : 'ltr' }}>
+      <div className="px-5 pt-6 pb-5 rounded-b-[2.5rem] shadow-2xl" style={{ background: `linear-gradient(135deg, #0B5E57 0%, #14B8A6 100%)` }}>
+        <div className="flex justify-between items-start gap-3">
           <div>
-            <p className="text-teal-200 text-sm">{ar ? 'الاثنين، 15 يناير 2024' : 'Monday, Jan 15 2024'}</p>
-            <h1 className="text-white font-black text-xl mt-0.5">{ar ? 'مرحباً، أحمد 👋' : 'Hello, Ahmed 👋'}</h1>
-            <p className="text-teal-200 text-sm">{ar ? 'متجر الأمل' : 'Al-Amal Store'}</p>
+            <p className="text-teal-100 text-xs opacity-80">{ar ? 'الاثنين، 15 يناير 2024' : 'Monday, Jan 15 2024'}</p>
+            <h1 className="text-white font-black text-2xl mt-2">{ar ? 'مرحباً، أحمد' : 'Hello, Ahmed'} <span className="text-3xl">👋</span></h1>
+            <p className="text-teal-200 text-sm mt-1">{ar ? 'متجر الأمل' : 'Al-Amal Store'}</p>
           </div>
-          <button onClick={() => onNavigate('notifications')} className="relative w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center">
-            <Bell size={20} className="text-white"/>
-            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs flex items-center justify-center font-black">3</span>
+          <button onClick={() => onNavigate('notifications')} className="relative w-12 h-12 rounded-3xl bg-white/15 border border-white/20 flex items-center justify-center text-white shadow-xl backdrop-blur-xl">
+            <Bell size={20} />
+            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-black flex items-center justify-center">3</span>
           </button>
         </div>
-        <div className="bg-white/15 rounded-2xl p-4 flex justify-between items-center">
-          <div>
-            <p className="text-teal-200 text-sm">{ar ? 'إجمالي إيرادات اليوم' : "Today's Revenue"}</p>
-            <p className="text-white font-black mt-1" style={{ fontSize: '2rem' }}>ر.س 4,230</p>
-            <div className="flex items-center gap-1.5 mt-1">
-              <TrendingUp size={14} className="text-green-300"/>
-              <span className="text-green-300 text-sm font-bold">+18.3%</span>
-              <span className="text-teal-300 text-xs">{ar ? 'من أمس' : 'vs yesterday'}</span>
+
+        <div className="mt-6 rounded-[2rem] bg-white/10 p-5 backdrop-blur-xl border border-white/20 shadow-xl">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-teal-100 text-sm">{ar ? 'إجمالي إيرادات اليوم' : "Today's Revenue"}</p>
+              <p className="font-black text-white text-[2.5rem] md:text-[3rem] mt-2">ر.س 4,230</p>
+            </div>
+            <div className="rounded-3xl bg-white/15 p-4 text-center min-w-[120px]">
+              <p className="text-teal-100 text-xs">{ar ? 'الأرباح' : 'Profit'}</p>
+              <p className="font-black text-white text-xl mt-2">ر.س 1,680</p>
             </div>
           </div>
-          <div className="bg-white/10 rounded-xl p-3 text-center">
-            <p className="text-teal-200 text-xs">{ar ? 'الأرباح' : 'Profit'}</p>
-            <p className="text-white font-black text-lg">ر.س 1,680</p>
+          <div className="mt-3 flex items-center gap-2 text-[13px] text-teal-100 opacity-90">
+            <TrendingUp size={16} />
+            <span className="font-black">+18.3%</span>
+            <span>{ar ? 'من أمس' : 'vs yesterday'}</span>
           </div>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="px-5 mt-5 grid grid-cols-2 gap-3">
+      <div className="px-5 mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {kpiCards.map((card, i) => (
-          <div key={i} className="bg-white rounded-2xl p-4 shadow-sm" style={{ border: '1px solid #F1F5F9' }}>
-            <div className="flex justify-between items-start">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: card.color + '18', color: card.color }}>{card.icon}</div>
-              <span className="text-xs font-black px-2 py-0.5 rounded-full" style={{ background: card.trend === 'up' ? GR+'20' : RE+'20', color: card.trend === 'up' ? GR : RE }}>
-                {card.trend === 'up' ? '↑' : '↓'}
+          <div key={i} className="rounded-[2rem] bg-white p-4 shadow-sm border border-gray-100">
+            <div className="flex items-center justify-between gap-3">
+              <div className="w-11 h-11 rounded-3xl flex items-center justify-center" style={{ background: card.color + '15', color: card.color }}>
+                {card.icon}
+              </div>
+              <span className="text-[11px] font-black px-2.5 py-1 rounded-full" style={{ background: card.trend === 'up' ? GR+'15' : RE+'15', color: card.trend === 'up' ? GR : RE }}>
+                {card.trend === 'up' ? (ar ? '↑ ارتفاع' : '↑ Up') : (ar ? '↓ انخفاض' : '↓ Down')}
               </span>
             </div>
-            <p className="font-black mt-3" style={{ fontSize: '1.35rem', color: card.color }}>{card.value}</p>
-            <p className="text-gray-800 text-sm font-semibold">{card.label}</p>
-            <p className="text-gray-400 text-xs mt-0.5">{card.sub}</p>
+            <p className="font-black text-2xl mt-4" style={{ color: card.color }}>{card.value}</p>
+            <p className="text-gray-500 text-sm mt-1">{card.label}</p>
+            <p className="text-gray-400 text-xs mt-1">{card.sub}</p>
           </div>
         ))}
       </div>
 
-      {/* Sales Chart */}
-      <div className="mx-5 mt-5 bg-white rounded-2xl p-4 shadow-sm" style={{ border: '1px solid #F1F5F9' }}>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="font-black text-gray-900">{ar ? 'مبيعات الأسبوع' : 'Weekly Sales'}</h3>
-          <button className="text-xs font-bold px-3 py-1.5 rounded-lg" style={{ color: P, background: P+'12' }}>{ar ? 'عرض الكل' : 'View All'}</button>
+      <div className="mx-5 mt-5 rounded-[2rem] bg-white p-4 shadow-sm border border-gray-100">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="font-black text-gray-900">{ar ? 'مبيعات الأسبوع' : 'Weekly Sales'}</h3>
+            <p className="text-gray-400 text-xs">{ar ? 'لمحة سريعة على أداء المبيعات' : 'A quick look at sales performance'}</p>
+          </div>
+          <button className="rounded-2xl border border-gray-200 px-3 py-2 text-xs font-bold text-teal-700 hover:bg-teal-50 transition-colors">
+            {ar ? 'عرض الكل' : 'View All'}
+          </button>
         </div>
-        <ResponsiveContainer width="100%" height={155}>
-          <AreaChart data={DAILY_SALES} margin={{ top: 5, right: 5, bottom: 0, left: -22 }}>
+        <ResponsiveContainer width="100%" height={170}>
+          <AreaChart data={DAILY_SALES} margin={{ top: 0, right: 0, bottom: 0, left: -10 }}>
             <defs>
               <linearGradient id="salesG" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor={P} stopOpacity={0.28}/>
+                <stop offset="5%" stopColor={P} stopOpacity={0.24}/>
                 <stop offset="95%" stopColor={P} stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <XAxis dataKey={ar ? 'day' : 'dayEn'} tick={{ fontSize: 11, fontFamily: 'Cairo', fill: '#94A3B8' }} axisLine={false} tickLine={false}/>
-            <YAxis tick={{ fontSize: 9, fill: '#94A3B8' }} axisLine={false} tickLine={false}/>
-            <Tooltip contentStyle={{ borderRadius: 12, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.1)', fontFamily: 'Cairo', fontSize: 12 }} formatter={(v: number) => [`ر.س ${v.toLocaleString()}`, ar ? 'المبيعات' : 'Sales']}/>
-            <Area type="monotone" dataKey="sales" stroke={P} strokeWidth={2.5} fill="url(#salesG)" dot={false} activeDot={{ r: 5, fill: P }}/>
+            <XAxis dataKey={ar ? 'day' : 'dayEn'} tick={{ fontSize: 11, fontFamily: 'Cairo', fill: '#94A3B8' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 10, fill: '#94A3B8' }} axisLine={false} tickLine={false} />
+            <Tooltip contentStyle={{ borderRadius: 14, border: '1px solid rgba(15,118,110,0.12)', boxShadow: '0 12px 30px rgba(15,118,110,0.08)', fontFamily: 'Cairo', fontSize: 12 }} formatter={(v: number) => [`ر.س ${v.toLocaleString()}`, ar ? 'المبيعات' : 'Sales']} />
+            <Area type="monotone" dataKey="sales" stroke={P} strokeWidth={3} fill="url(#salesG)" dot={false} activeDot={{ r: 5, fill: P }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
 
-      {/* Quick Actions */}
-      <div className="px-5 mt-5">
-        <h3 className="font-black text-gray-900 mb-3 flex items-center gap-2"><Zap size={17} style={{ color: AM }}/>{ar ? 'إجراءات سريعة' : 'Quick Actions'}</h3>
-        <div className="grid grid-cols-4 gap-3">
-          {quickActions.map(({ label, screen, icon, color }) => (
-            <button key={screen} onClick={() => onNavigate(screen)} className="flex flex-col items-center gap-2 p-3 bg-white rounded-2xl shadow-sm active:scale-95 transition-transform" style={{ border: '1px solid #F1F5F9' }}>
-              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-white" style={{ background: `linear-gradient(135deg, ${color}cc, ${color})` }}>{icon}</div>
-              <span className="text-xs font-bold text-gray-700 text-center leading-tight">{label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Low Stock Alert */}
       {lowStock.length > 0 && (
-        <div className="mx-5 mt-5 rounded-2xl p-4" style={{ background: '#FEF2F2', border: '1px solid #FECACA' }}>
-          <div className="flex justify-between items-center mb-3">
-            <div className="flex items-center gap-2"><AlertTriangle size={17} style={{ color: RE }}/><h3 className="font-black text-red-700 text-sm">{ar ? 'تنبيه مخزون منخفض' : 'Low Stock Alert'}</h3></div>
-            <button onClick={() => onNavigate('inventory')} className="text-xs font-black" style={{ color: RE }}>{ar ? 'عرض الكل' : 'View All'}</button>
-          </div>
-          {lowStock.slice(0, 3).map(p => (
-            <div key={p.id} className="flex justify-between items-center py-2 border-t border-red-100 first:border-0">
-              <span className="text-red-800 text-sm font-medium">{ar ? p.name : p.nameEn}</span>
-              <span className="text-xs font-black px-2 py-0.5 rounded-lg" style={{ background: '#FEE2E2', color: RE }}>{ar ? `${p.stock} متبقي` : `${p.stock} left`}</span>
+        <div className="mx-5 mt-5 rounded-[2rem] bg-[#FEF6F5] p-4 shadow-sm border border-[#FBCACA]">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={18} className="text-red-500" />
+              <h3 className="font-black text-red-700 text-sm">{ar ? 'تنبيه مخزون منخفض' : 'Low Stock Alert'}</h3>
             </div>
-          ))}
+            <button onClick={() => onNavigate('inventory')} className="text-xs font-bold text-red-600 hover:text-red-700 transition-colors">
+              {ar ? 'عرض الكل' : 'View All'}
+            </button>
+          </div>
+          <div className="space-y-3">
+            {lowStock.slice(0, 3).map(p => (
+              <div key={p.id} className="flex items-center justify-between gap-3">
+                <div>
+                  <p className="font-semibold text-red-800 text-sm">{ar ? p.name : p.nameEn}</p>
+                  <p className="text-gray-500 text-xs">{ar ? 'أعد التعبئة بسرعة' : 'Restock quickly'}</p>
+                </div>
+                <span className="text-[11px] font-black px-2.5 py-1 rounded-full" style={{ background: '#FEE2E2', color: RE }}>
+                  {ar ? `${p.stock} متبقي` : `${p.stock} left`}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
-      {/* Recent Invoices */}
       <div className="px-5 mt-5">
-        <div className="flex justify-between items-center mb-3">
+        <div className="flex items-center justify-between mb-3">
           <h3 className="font-black text-gray-900">{ar ? 'آخر الفواتير' : 'Recent Invoices'}</h3>
-          <button onClick={() => onNavigate('invoice-history')} className="text-xs font-bold flex items-center gap-1" style={{ color: P }}>
-            {ar ? 'عرض الكل' : 'View All'}<Arrow size={13}/>
+          <button onClick={() => onNavigate('invoice-history')} className="text-xs font-bold text-teal-700 hover:text-teal-900 transition-colors flex items-center gap-1">
+            {ar ? 'عرض الكل' : 'View All'}<Arrow size={13} />
           </button>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="space-y-3">
           {INVOICES.slice(0, 4).map(inv => (
-            <div key={inv.id} className="bg-white rounded-2xl p-4 shadow-sm flex justify-between items-center" style={{ border: '1px solid #F1F5F9' }}>
+            <div key={inv.id} className="rounded-[2rem] bg-white p-4 shadow-sm border border-gray-100 flex justify-between items-center gap-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: P+'15', color: P }}><CreditCard size={18}/></div>
+                <div className="w-11 h-11 rounded-3xl flex items-center justify-center" style={{ background: P+'15', color: P }}><CreditCard size={18} /></div>
                 <div>
-                  <p className="font-bold text-gray-900 text-sm">{inv.customer}</p>
+                  <p className="font-black text-gray-900 text-sm">{inv.customer}</p>
                   <p className="text-gray-400 text-xs">{inv.id} · {inv.items} {ar ? 'منتجات' : 'items'}</p>
                 </div>
               </div>
               <div className="text-right">
                 <p className="font-black text-gray-900">ر.س {inv.total}</p>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: inv.status === 'paid' ? GR+'15' : RE+'15', color: inv.status === 'paid' ? GR : RE }}>
+                <span className="text-[11px] font-bold px-2.5 py-1 rounded-full" style={{ background: inv.status === 'paid' ? GR+'15' : RE+'15', color: inv.status === 'paid' ? GR : RE }}>
                   {inv.status === 'paid' ? (ar ? 'مدفوع' : 'Paid') : (ar ? 'مسترد' : 'Refunded')}
                 </span>
               </div>

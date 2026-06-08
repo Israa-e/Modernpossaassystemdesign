@@ -7,6 +7,14 @@ const AM = "#F59E0B";
 const RE = "#EF4444";
 const GR = "#22C55E";
 
+const MOVEMENTS = [
+  { id: '1', product: 'قهوة عربية', productEn: 'Arabic Coffee', type: 'inbound', qty: 30, date: '2024-06-07', operator: 'علي' },
+  { id: '2', product: 'خبز عيش', productEn: 'Bread Loaf', type: 'outbound', qty: 22, date: '2024-06-07', operator: 'سارة' },
+  { id: '3', product: 'حليب طازج', productEn: 'Fresh Milk', type: 'inbound', qty: 18, date: '2024-06-06', operator: 'خالد' },
+  { id: '4', product: 'عصير برتقال', productEn: 'Orange Juice', type: 'outbound', qty: 12, date: '2024-06-06', operator: 'منى' },
+  { id: '5', product: 'خيار', productEn: 'Cucumber', type: 'inbound', qty: 40, date: '2024-06-05', operator: 'طارق' },
+];
+
 interface Props { lang: Lang; onNavigate: (s: Screen) => void; }
 
 /* ─── Products List ─── */
@@ -348,6 +356,10 @@ export function InventoryScreen({ lang, onNavigate }: Props) {
           <div>
             <h1 className="text-white font-black text-xl">{ar ? 'المخزون' : 'Inventory'}</h1>
             <p className="text-teal-100 text-sm">{PRODUCTS.length} {ar ? 'منتج في المخزون' : 'products in stock'}</p>
+            <button onClick={() => onNavigate('stock-movement')}
+              className="mt-3 inline-flex items-center gap-2 rounded-2xl bg-white/20 px-3 py-2 text-xs font-bold text-white border border-white/30">
+              {ar ? 'عرض الحركات' : 'View Movements'}
+            </button>
           </div>
         </div>
         {/* Stats */}
@@ -411,6 +423,83 @@ export function InventoryScreen({ lang, onNavigate }: Props) {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Stock Movements ─── */
+export function StockMovementScreen({ lang, onNavigate }: Props) {
+  const ar = lang === 'ar';
+  const [filter, setFilter] = useState<'all' | 'inbound' | 'outbound'>('all');
+
+  const filtered = MOVEMENTS.filter(m => filter === 'all' || m.type === filter);
+  const stats = {
+    all: MOVEMENTS.length,
+    inbound: MOVEMENTS.filter(m => m.type === 'inbound').length,
+    outbound: MOVEMENTS.filter(m => m.type === 'outbound').length,
+  };
+
+  return (
+    <div className="pb-24 min-h-screen" style={{ background: '#F8FAFC', fontFamily: 'Cairo, sans-serif', direction: ar ? 'rtl' : 'ltr' }}>
+      <div className="px-5 pt-6 pb-5 flex items-center gap-3" style={{ background: `linear-gradient(135deg, ${P}, #14B8A6)` }}>
+        <button onClick={() => onNavigate('inventory')} className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+          {ar ? <ChevronRight size={20} className="text-white" /> : <ChevronLeft size={20} className="text-white" />}
+        </button>
+        <div>
+          <h1 className="text-white font-black text-xl">{ar ? 'حركات المخزون' : 'Stock Movements'}</h1>
+          <p className="text-teal-100 text-sm">{ar ? 'سجل إدخال وإخراج المخزون' : 'Inbound and outbound stock history'}</p>
+        </div>
+      </div>
+
+      <div className="px-4 py-3 grid grid-cols-3 gap-2">
+        {[
+          { label: ar ? 'إجمالي الحركة' : 'Total', val: stats.all, color: P },
+          { label: ar ? 'وارد' : 'Inbound', val: stats.inbound, color: GR },
+          { label: ar ? 'صادر' : 'Outbound', val: stats.outbound, color: RE },
+        ].map((s, i) => (
+          <div key={i} className="bg-white rounded-2xl p-3 shadow-sm border border-gray-100 text-center">
+            <p className="font-black text-base" style={{ color: s.color }}>{s.val}</p>
+            <p className="text-gray-400 text-xs mt-0.5">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="px-4 py-3 flex gap-2 overflow-x-auto no-scrollbar">
+        {[
+          { key: 'all', label: ar ? 'الكل' : 'All' },
+          { key: 'inbound', label: ar ? 'وارد' : 'Inbound' },
+          { key: 'outbound', label: ar ? 'صادر' : 'Outbound' },
+        ].map(item => (
+          <button key={item.key} onClick={() => setFilter(item.key as any)}
+            className="flex-shrink-0 px-4 py-2 rounded-xl text-sm font-bold transition-all"
+            style={{ background: filter === item.key ? P : '#fff', color: filter === item.key ? '#fff' : '#64748B', border: `1px solid ${filter === item.key ? P : '#E2E8F0'}` }}>
+            {item.label}
+          </button>
+        ))}
+      </div>
+
+      <div className="px-4 flex flex-col gap-3">
+        {filtered.map(m => (
+          <div key={m.id} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+            <div className="flex items-start gap-3">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-xl" style={{ background: m.type === 'inbound' ? `${GR}15` : `${RE}15`, color: m.type === 'inbound' ? GR : RE }}>
+                {m.type === 'inbound' ? '+' : '−'}
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-bold text-gray-900 text-sm">{ar ? m.product : m.productEn}</p>
+                <p className="text-gray-400 text-xs mt-0.5">{ar ? 'المشغل' : 'Operator'} · {m.operator}</p>
+                <div className="mt-3 flex flex-wrap gap-2 text-xs text-gray-500">
+                  <span>{ar ? 'الكمية' : 'Qty'}: {m.qty}</span>
+                  <span>{ar ? 'التاريخ' : 'Date'}: {m.date}</span>
+                </div>
+              </div>
+              <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ color: m.type === 'inbound' ? GR : RE, background: (m.type === 'inbound' ? GR : RE) + '15' }}>
+                {m.type === 'inbound' ? (ar ? 'وارد' : 'Inbound') : (ar ? 'صادر' : 'Outbound')}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

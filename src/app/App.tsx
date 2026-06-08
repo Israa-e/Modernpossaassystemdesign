@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Lang, Screen, Theme } from "./data/store";
 
 // Auth
@@ -11,7 +11,7 @@ import { MobileNav } from "./components/MobileNav";
 import { DashboardScreen } from "./components/DashboardScreen";
 
 // Products / Inventory
-import { ProductsScreen, AddProductScreen, CategoriesScreen, InventoryScreen } from "./components/ProductScreens";
+import { ProductsScreen, AddProductScreen, CategoriesScreen, InventoryScreen, StockMovementScreen } from "./components/ProductScreens";
 
 // Cashier / POS
 import { CashierScreen, CartScreen, PaymentScreen, InvoiceScreen, InvoiceHistoryScreen } from "./components/CashierScreens";
@@ -47,6 +47,20 @@ export default function App() {
   const isMobile = MOBILE_SCREENS.includes(screen);
   const showNav = NAV_SCREENS.includes(screen) && isMobile;
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const storedLang = window.localStorage.getItem('nuqta-lang');
+    const storedTheme = window.localStorage.getItem('nuqta-theme');
+    if (storedLang === 'ar' || storedLang === 'en') setLang(storedLang);
+    if (storedTheme === 'light' || storedTheme === 'dark') setTheme(storedTheme);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    window.localStorage.setItem('nuqta-lang', lang);
+    window.localStorage.setItem('nuqta-theme', theme);
+  }, [lang, theme]);
+
   const commonProps = { lang, onNavigate: navigate };
   const authProps = { ...commonProps, onSetLang: setLang };
   const settingsProps = { ...commonProps, onSetLang: setLang, onSetTheme: setTheme, theme };
@@ -79,23 +93,28 @@ export default function App() {
       case 'subscription':    return <SubscriptionScreen {...commonProps} />;
       case 'settings':        return <SettingsScreen {...settingsProps} />;
       // Web
-      case 'web-dashboard':   return <WebDashboard lang={lang} onNavigate={navigate} onSetLang={setLang} />;
+      case 'web-dashboard':   return <WebDashboard lang={lang} onNavigate={navigate} onSetLang={setLang} theme={theme} />;
       // Fallbacks
-      case 'stock-movement':  return <InventoryScreen {...commonProps} />;
+      case 'stock-movement':  return <StockMovementScreen {...commonProps} />;
       default:                return <DashboardScreen {...commonProps} />;
     }
   };
 
+  const themeClass = theme === 'dark' ? 'dark' : '';
+  const shellBackground = theme === 'dark' ? '#020617' : '#E2E8F0';
+  const phoneBackground = theme === 'dark' ? '#0F172A' : '#F8FAFC';
+  const webBackground = theme === 'dark' ? '#020617' : '#F8FAFC';
+
   // Web dashboard gets full viewport
   if (screen === 'web-dashboard') {
-    return <div style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>{renderScreen()}</div>;
+    return <div className={themeClass} style={{ width: '100vw', height: '100vh', overflow: 'hidden', background: webBackground }}>{renderScreen()}</div>;
   }
 
   // Mobile shell — centered phone frame on desktop, full width on mobile
   return (
-    <div style={{ minHeight: '100vh', background: '#E2E8F0', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '0', fontFamily: 'Cairo, sans-serif' }}>
+    <div className={themeClass} style={{ minHeight: '100vh', background: shellBackground, display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: '0', fontFamily: 'Cairo, sans-serif' }}>
       {/* Phone frame */}
-      <div style={{ width: '100%', maxWidth: 430, minHeight: '100vh', position: 'relative', background: '#F8FAFC', overflow: 'hidden', boxShadow: '0 25px 80px rgba(0,0,0,0.3)' }}>
+      <div style={{ width: '100%', maxWidth: 430, minHeight: '100vh', position: 'relative', background: phoneBackground, overflow: 'hidden', boxShadow: '0 25px 80px rgba(0,0,0,0.3)' }}>
         {/* Screen content */}
         <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
           {renderScreen()}
